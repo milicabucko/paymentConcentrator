@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.sep.PaymentConcentrator.config.PaypalConfig;
 import com.sep.PaymentConcentrator.constants.Constants;
+import com.sep.PaymentConcentrator.model.Kupovina;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,15 +29,18 @@ public class PaypalService {
         this.payPalConfig = payPalConfig;
     }
 
-    public String getPaymentLink() throws PayPalRESTException {
+    public String getPaymentLink(Kupovina kupovina) throws PayPalRESTException {
         Payment payment = this.createPayment(
-                1.0,
+                kupovina.getCena(),
                 "USD",
                 "paypal",
                 "sale",
                 "Kupovina proizvoda",
                 Constants.CANCELED_PAYMENT_URL,
-                Constants.SUCCESSFUL_PAYMENT_URL);
+                Constants.SUCCESSFUL_PAYMENT_URL,
+                kupovina.getProizvodId(),
+                kupovina.getTipProizvoda(),
+                kupovina.getKorisnikId());
         for(Links links : payment.getLinks()){
             if(links.getRel().equals("approval_url")){
                 return links.getHref();
@@ -46,7 +50,7 @@ public class PaypalService {
     }
 
     public Payment createPayment(double iznos, String valuta, String metod, String svrha,
-                                 String opis, String cancelUrl, String successUrl) throws PayPalRESTException {
+                                 String opis, String cancelUrl, String successUrl, Long proizvodId, String tipProizvoda, Long korisnikId) throws PayPalRESTException {
         Amount amount = new Amount(valuta, String.format("%.2f", iznos));
 
         Transaction transaction = new Transaction();
@@ -63,8 +67,8 @@ public class PaypalService {
         payment.setTransactions(transactions);
 
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl(Constants.CANCELED_PAYMENT_URL);
-        redirectUrls.setReturnUrl(Constants.SUCCESSFUL_PAYMENT_URL);
+        redirectUrls.setCancelUrl(cancelUrl);
+        redirectUrls.setReturnUrl(successUrl + '/' + korisnikId + '/' + proizvodId + '/' + tipProizvoda);
         payment.setRedirectUrls(redirectUrls);
 
         return payment.create(payPalConfig.apiContext());
