@@ -20,11 +20,11 @@ public class PaymentController {
     @RequestMapping(
             value = "/payment/execute",
             method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.TEXT_PLAIN_VALUE
     )
     public ResponseEntity<String> executePayment(@RequestBody Kupovina kupovina) throws PayPalRESTException {
         String paymentLink = paypalService.getPaymentLink(kupovina);
-        return new ResponseEntity<>("Zdravo payment", HttpStatus.OK);
+        return new ResponseEntity<>(paymentLink, HttpStatus.OK);
     }
 
     @RequestMapping(
