@@ -2,6 +2,7 @@ package com.sep.PaymentConcentrator.controller;
 
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import com.sep.PaymentConcentrator.constants.Constants;
 import com.sep.PaymentConcentrator.model.Kupovina;
 import com.sep.PaymentConcentrator.service.PaypalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -16,6 +18,14 @@ public class PaymentController {
 
     @Autowired
     private PaypalService paypalService;
+
+    private final RestTemplate restTemplate;
+
+
+    @Autowired
+    public PaymentController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @RequestMapping(
             value = "/payment/execute",
@@ -51,7 +61,7 @@ public class PaymentController {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
-                //restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/success", uplataId, Void.class);
+                restTemplate.postForObject(Constants.DATABASE_SERVER_URL + "/kupovina/" + korisnikId + "/" + proizvodId + "/" + tipProizvoda, null, String.class);
                 System.out.println("Valja");
                 return;
             }
