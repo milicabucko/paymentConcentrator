@@ -12,6 +12,8 @@ public class Kupovina implements Serializable {
 
     private Double cena;
 
+    private Integer brojMeseci;
+
     public Kupovina() {}
 
     public Long getKorisnikId() {
@@ -44,5 +46,13 @@ public class Kupovina implements Serializable {
 
     public void setCena(Double cena) {
         this.cena = cena;
+    }
+
+    public Integer getBrojMeseci() {
+        return brojMeseci;
+    }
+
+    public void setBrojMeseci(Integer brojMeseci) {
+        this.brojMeseci = brojMeseci;
     }
 }

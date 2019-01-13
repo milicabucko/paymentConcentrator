@@ -40,7 +40,8 @@ public class PaypalService {
                 Constants.SUCCESSFUL_PAYMENT_URL,
                 kupovina.getProizvodId(),
                 kupovina.getTipProizvoda(),
-                kupovina.getKorisnikId());
+                kupovina.getKorisnikId(),
+                kupovina.getBrojMeseci());
         for(Links links : payment.getLinks()){
             if(links.getRel().equals("approval_url")){
                 return links.getHref();
@@ -50,7 +51,7 @@ public class PaypalService {
     }
 
     public Payment createPayment(double iznos, String valuta, String metod, String svrha,
-                                 String opis, String cancelUrl, String successUrl, Long proizvodId, String tipProizvoda, Long korisnikId) throws PayPalRESTException {
+                                 String opis, String cancelUrl, String successUrl, Long proizvodId, String tipProizvoda, Long korisnikId, Integer brojMeseci) throws PayPalRESTException {
         Amount amount = new Amount(valuta, String.format("%.2f", iznos));
 
         Transaction transaction = new Transaction();
@@ -68,7 +69,12 @@ public class PaypalService {
 
         RedirectUrls redirectUrls = new RedirectUrls();
         redirectUrls.setCancelUrl(cancelUrl);
-        redirectUrls.setReturnUrl(successUrl + '/' + korisnikId + '/' + proizvodId + '/' + tipProizvoda);
+        if (brojMeseci != -1) {
+            redirectUrls.setReturnUrl(successUrl + '/' + korisnikId + '/' + proizvodId + '/' + tipProizvoda + '/' + brojMeseci);
+        }
+        else {
+            redirectUrls.setReturnUrl(successUrl + '/' + korisnikId + '/' + proizvodId + '/' + tipProizvoda);
+        }
         payment.setRedirectUrls(redirectUrls);
 
         return payment.create(payPalConfig.apiContext());

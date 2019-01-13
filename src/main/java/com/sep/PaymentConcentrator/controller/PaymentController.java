@@ -71,4 +71,29 @@ public class PaymentController {
         //restTemplate.postForObject(databaseUri.getPaymentHandler() + "/payment/error", uplataId, Void.class);
     }
 
+    @RequestMapping(
+            value = "/payment/success/{korisnikId}/{proizvodId}/{tipProizvoda}/{brojMeseci}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public void successPayPalClanarina(@RequestParam("paymentId")String paymentId,
+                              @RequestParam("PayerID")String payerId,
+                              @PathVariable Long korisnikId,
+                              @PathVariable Long proizvodId,
+                              @PathVariable String tipProizvoda,
+                              @PathVariable Integer brojMeseci
+    ){
+        try {
+            Payment payment = paypalService.executePayment(paymentId, payerId);
+            if(payment.getState().equals("approved")){
+                restTemplate.postForObject(Constants.DATABASE_SERVER_URL + "/kupovina/" + korisnikId + "/" + proizvodId + "/" + tipProizvoda + "/" + brojMeseci, null, String.class);
+                System.out.println("Valja");
+                return;
+            }
+        } catch (PayPalRESTException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
