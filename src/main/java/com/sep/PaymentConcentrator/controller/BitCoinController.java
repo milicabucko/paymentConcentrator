@@ -39,10 +39,10 @@ public class BitCoinController {
 		
 		Map<String, Object> mapa = new HashMap<String,Object>();
         mapa.put("order_id",UUID.randomUUID().toString());
-        mapa.put("price_amount",b.getAmount());
+        mapa.put("price_amount",b.getCena());
         mapa.put("price_currency","USD");
         mapa.put("receive_currency","USD");
-        mapa.put("title",b.getNaziv());
+        mapa.put("title",b.getProizvodID());
         mapa.put("description","desc");
         mapa.put("callback_url","https://api-sandbox.coingate.com/account/orders"); //TODO:promeniti
         mapa.put("success_url", "http://localhost:9000/responseSuccessBitcoin.html");
@@ -60,7 +60,7 @@ public class BitCoinController {
         noviHeaders.add("Location", response.getPayment_url()); //payment url
         noviHeaders.add("id", response.getId().toString()); //id inicirane transakcije
         noviHeaders.add("uuid", response.getPayment_url().split("invoice/")[1]);
-        noviHeaders.add("title", b.getNaziv()); //naziv casopisa koji se placa
+        noviHeaders.add("title", b.getProizvodID().toString()); //naziv casopisa koji se placa
         noviHeaders.add("created_at", response.getCreated_at());
         noviHeaders.add("status", response.getStatus()); //ovde ce uvek biti new
         noviHeaders.add("merchant_order_id", response.getOrder_id()); //uplatilac        
@@ -73,7 +73,7 @@ public class BitCoinController {
         String paymentUrl = response.getPayment_url();
         String idIniciraneTransakcije = response.getId().toString();
         String uuid = response.getPayment_url().split("invoice/")[1];
-        String naziv = b.getNaziv();
+        String naziv = b.getTipProizvoda();
         String vremeKreiranja = response.getCreated_at();
         String status = response.getStatus();
         String uplatilac = response.getOrder_id();

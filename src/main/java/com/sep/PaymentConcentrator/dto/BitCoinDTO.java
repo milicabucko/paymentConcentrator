@@ -2,33 +2,36 @@ package com.sep.PaymentConcentrator.dto;
 
 public class BitCoinDTO {
 	
-	private String amount;
-	private String naziv;
-	
-	public BitCoinDTO() {
-		super();
+	private Long proizvodID;
+	private String tipProizvoda;
+    private Long korisnikId;
+    private Double cena;
+	public Long getProizvodID() {
+		return proizvodID;
 	}
-
-	public BitCoinDTO(String amount, String naziv) {
-		super();
-		this.amount = amount;
-		this.naziv = naziv;
+	public void setProizvodID(Long proizvodID) {
+		this.proizvodID = proizvodID;
 	}
-
-	public String getAmount() {
-		return amount;
+	public String getTipProizvoda() {
+		return tipProizvoda;
 	}
-
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public void setTipProizvoda(String tipProizvoda) {
+		this.tipProizvoda = tipProizvoda;
 	}
-
-	public String getNaziv() {
-		return naziv;
+	public Long getKorisnikId() {
+		return korisnikId;
 	}
-
-	public void setNaziv(String naziv) {
-		this.naziv = naziv;
+	public void setKorisnikId(Long korisnikId) {
+		this.korisnikId = korisnikId;
 	}
-
+	public Double getCena() {
+		return cena;
+	}
+	public void setCena(Double cena) {
+		this.cena = cena;
+	}
+    
+    
+    
 }
+
