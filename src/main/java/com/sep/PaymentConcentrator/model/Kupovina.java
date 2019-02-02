@@ -13,8 +13,18 @@ public class Kupovina implements Serializable {
     private Double cena;
 
     private Integer brojMeseci;
+    
+    private Long tenantID;
 
-    public Kupovina() {}
+    public Long getTenantID() {
+		return tenantID;
+	}
+
+	public void setTenantID(Long tenantID) {
+		this.tenantID = tenantID;
+	}
+
+	public Kupovina() {}
 
     public Long getKorisnikId() {
         return korisnikId;
