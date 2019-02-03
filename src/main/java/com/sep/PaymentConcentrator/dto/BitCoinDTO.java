@@ -2,15 +2,15 @@ package com.sep.PaymentConcentrator.dto;
 
 public class BitCoinDTO {
 	
-	private Long proizvodID;
+	private Long proizvodId;
 	private String tipProizvoda;
     private Long korisnikId;
     private Double cena;
-	public Long getProizvodID() {
-		return proizvodID;
+	public Long getProizvodId() {
+		return proizvodId;
 	}
-	public void setProizvodID(Long proizvodID) {
-		this.proizvodID = proizvodID;
+	public void setProizvodId(Long proizvodId) {
+		this.proizvodId = proizvodId;
 	}
 	public String getTipProizvoda() {
 		return tipProizvoda;

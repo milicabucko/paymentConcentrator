@@ -13,7 +13,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "naucna_centrala")
 public class NaucnaCentrala implements Serializable{
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8784593276181128553L;
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id")

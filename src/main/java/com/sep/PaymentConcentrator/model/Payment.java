@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "naucna_centrala")
+@Table(name = "payment")
 public class Payment implements Serializable{
 	
 	/**
@@ -39,5 +39,53 @@ public class Payment implements Serializable{
 
 	@Column
 	private Long radId;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getTenantID() {
+		return tenantID;
+	}
+
+	public void setTenantID(Long tenantID) {
+		this.tenantID = tenantID;
+	}
+
+	public Long getUserID() {
+		return userID;
+	}
+
+	public void setUserID(Long userID) {
+		this.userID = userID;
+	}
+
+	public Long getCasopisID() {
+		return casopisID;
+	}
+
+	public void setCasopisID(Long casopisID) {
+		this.casopisID = casopisID;
+	}
+
+	public Long getIzdanjeMagazinaId() {
+		return izdanjeMagazinaId;
+	}
+
+	public void setIzdanjeMagazinaId(Long izdanjeMagazinaId) {
+		this.izdanjeMagazinaId = izdanjeMagazinaId;
+	}
+
+	public Long getRadId() {
+		return radId;
+	}
+
+	public void setRadId(Long radId) {
+		this.radId = radId;
+	}
 
 }
