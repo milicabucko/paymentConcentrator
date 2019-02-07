@@ -6,6 +6,7 @@ import java.util.List;
 import com.sep.PaymentConcentrator.config.PaypalConfig;
 import com.sep.PaymentConcentrator.constants.Constants;
 import com.sep.PaymentConcentrator.model.Kupovina;
+import com.sep.PaymentConcentrator.util.PCUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,8 @@ public class PaypalService {
                 "paypal",
                 "sale",
                 "Kupovina proizvoda",
-                Constants.CANCELED_PAYMENT_URL,
-                Constants.SUCCESSFUL_PAYMENT_URL,
+                PCUtil.paymentConcentratorAvailable() + "/payment/cancel",
+                PCUtil.paymentConcentratorAvailable() +"/payment/success",
                 kupovina.getProizvodId(),
                 kupovina.getTipProizvoda(),
                 kupovina.getKorisnikId(),
@@ -47,7 +48,7 @@ public class PaypalService {
                 return links.getHref();
             }
         }
-        return Constants.CANCELED_PAYMENT_URL;
+        return PCUtil.paymentConcentratorAvailable() + "/payment/cancel";
     }
 
     public Payment createPayment(double iznos, String valuta, String metod, String svrha,
