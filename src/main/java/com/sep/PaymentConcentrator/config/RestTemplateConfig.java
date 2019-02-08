@@ -2,14 +2,22 @@ package com.sep.PaymentConcentrator.config;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.TrustStrategy;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,28 +29,25 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
     @Bean
-    public RestTemplate restTemplate() {
-        try {
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(new FileInputStream(new File("keystore.p12")), "nikola94".toCharArray());
+    public RestTemplate restTemplate() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+    	TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 
-            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
-                    new SSLContextBuilder()
-                            .loadTrustMaterial(null, new TrustSelfSignedStrategy())
-                            .loadKeyMaterial(keyStore, "nikola94".toCharArray())
-                            .build(),
-                    NoopHostnameVerifier.INSTANCE);
+		SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
+		        .loadTrustMaterial(null, acceptingTrustStrategy)
+		        .build();
 
-            HttpClient httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
+		SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
 
-            ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-            RestTemplate restTemplate = new RestTemplate(requestFactory);
+		CloseableHttpClient httpClient = HttpClients.custom()
+		        .setSSLSocketFactory(csf)
+		        .build();
 
-            return restTemplate;
-        }
-        catch(Exception exc) {
-            return null;
-        }
+		HttpComponentsClientHttpRequestFactory requestFactory =
+		        new HttpComponentsClientHttpRequestFactory();
+
+		requestFactory.setHttpClient(httpClient);
+
+		return new RestTemplate(requestFactory);
+
     }
-
 }

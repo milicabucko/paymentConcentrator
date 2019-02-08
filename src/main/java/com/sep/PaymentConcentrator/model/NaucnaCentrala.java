@@ -22,10 +22,21 @@ public class NaucnaCentrala implements Serializable{
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
-	private Long id;
+	private Long id; //merchantId
 
 	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "merchant_password")
+	private String merchantPassword;
+
+	public String getMerchantPassword() {
+		return merchantPassword;
+	}
+
+	public void setMerchantPassword(String merchantPassword) {
+		this.merchantPassword = merchantPassword;
+	}
 
 	public NaucnaCentrala() {
 	}

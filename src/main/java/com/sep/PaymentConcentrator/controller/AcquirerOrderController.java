@@ -14,42 +14,42 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.sep.PaymentConcentrator.dto.PaymentInfoDTO;
 import com.sep.PaymentConcentrator.dto.ResponseMessageDTO;
 import com.sep.PaymentConcentrator.dto.ResponseMessageDTO.TransactionResult;
+import com.sep.PaymentConcentrator.dto.UrlDTO;
+import com.sep.PaymentConcentrator.dto.UrlDTO.Status;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 public class AcquirerOrderController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AcquirerOrderController.class);
-
 	
 	@RequestMapping(value = "/payment/pay", method = RequestMethod.POST)
-    public ResponseEntity<ResponseMessageDTO> handlePaying(@RequestBody PaymentInfoDTO paymentInfoDTO) {
+    public ResponseEntity<UrlDTO> handlePaying(@RequestBody ResponseMessageDTO responseMessageDTO) {
 
-        System.out.println("Pogodio PC");
+		logger.info("Acquirer order payment executed.");
 
         RestTemplate client = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        ResponseMessageDTO responseMessageDTO = new ResponseMessageDTO();
-
+        UrlDTO dto = new UrlDTO();
         try {
 
-            System.out.println("Prosledjivanje kupovine osiguranja Acquirer banci");
-            //step 5
+        	logger.info("Forwarding payment to science center");
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<PaymentInfoDTO> entity = new HttpEntity<>(paymentInfoDTO, headers);
-            //TODO responseMessageDto je step 10, ovog poziva NCClient
-            responseMessageDTO  = client.postForObject("http://localhost:7575/api/payment/pay", entity,
-                    ResponseMessageDTO.class);
-            return new ResponseEntity<>(responseMessageDTO, HttpStatus.OK);
+            HttpEntity<ResponseMessageDTO> entity = new HttpEntity<>(responseMessageDTO, headers);
+            // saljemo u NC obavestenje da je placanje izvrseno
+            dto = client.postForObject("https://localhost:7000/api/payment/executed", entity,
+            		UrlDTO.class);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
 
         } catch (Exception e) {
-            System.out.println("Doslo je do greske");
-            responseMessageDTO.setResult(TransactionResult.ERROR);
-            return new ResponseEntity<>(responseMessageDTO, HttpStatus.BAD_REQUEST);
+        	logger.info("A mistake occurred {}.", e.getMessage());
+        	dto.setResult(TransactionResult.ERROR);
+        	dto.setStatus(Status.FAILED);
+        	dto.setUrl("https://localhost:4200/bankError");
+            return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
         }
 
     }

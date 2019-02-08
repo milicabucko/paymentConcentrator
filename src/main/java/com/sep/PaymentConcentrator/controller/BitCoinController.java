@@ -58,7 +58,6 @@ public class BitCoinController {
         
         RestTemplate client = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        //TODO: namestiti token od korisnika i sacuvati payment posle uspeha!!!
         headers.add("Authorization", "Token TCCkZmVXFx83JxNiVaQE2Jp74Bz9b1gDhryXEML6");
         HttpEntity<Map<String, Object>> entity = new HttpEntity<Map<String,Object>>(mapa, headers);
         
