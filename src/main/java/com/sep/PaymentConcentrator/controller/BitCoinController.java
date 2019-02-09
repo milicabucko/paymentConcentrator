@@ -24,7 +24,7 @@ import com.sep.PaymentConcentrator.dto.ResponseBitcoinDTO;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 public class BitCoinController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BitCoinController.class);
@@ -48,12 +48,12 @@ public class BitCoinController {
         mapa.put("title",b.getProizvodId());
         mapa.put("description","desc");
         if(b.getTipProizvoda().equals("IZDANJE_MAGAZINA")){ //TODO: MILENA - add role here 
-        	mapa.put("success_url", "http://localhost:4200/homePageCitalac/");
-            mapa.put("cancel_url","http://localhost:4200/homePageCitalac/"); 
+        	mapa.put("success_url", "https://192.168.0.12:4200/homePageCitalac/");
+            mapa.put("cancel_url","https://192.168.0.12:4200/homePageCitalac/"); 
 		}
         else if(b.getTipProizvoda().equals("NAUCNI_RAD")){  //TODO: MILENA - same here
-        	mapa.put("success_url", "http://localhost:4200/homePageCitalac/");
-            mapa.put("cancel_url","http://localhost:4200/homePageCitalac/"); 
+        	mapa.put("success_url", "https://192.168.0.12:4200/homePageCitalac/");
+            mapa.put("cancel_url","https://192.168.0.12:4200/homePageCitalac/"); 
         }
         
         RestTemplate client = new RestTemplate();

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:4200")
+@CrossOrigin
 public class PaymentController {
 
     @Autowired
